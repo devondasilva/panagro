@@ -1,7 +1,6 @@
 import './index.css'
 import App from './App.tsx';
 import Exploitation from './pages/Exploitation.tsx';
-import About from './pages/About.tsx';
 import Invest from './pages/Invest.tsx';
 import Login from './pages/Users/Login.tsx';
 import Careers from './pages/Careers.tsx';
@@ -19,7 +18,6 @@ if (root) {
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/exploitation" element={<Exploitation />} />
-        <Route path="/about" element={<About />} />
         <Route path="/invest" element={<Invest />} />
         <Route path="/careers" element={<Careers />} />
         <Route path="/login" element={<Login />} />
