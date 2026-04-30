@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, TrendingUp } from 'lucide-react';
-import Logico from '../assets/img/Logico.png'; // Optionnel si tu utilises le logo texte stylisé ci-dessous
-// import logo from '../assets/img/logo_fr.png'; // Optionnel si tu utilises le logo texte stylisé ci-dessous
+import { X, TrendingUp, ArrowRight, Leaf, User, Lock, LogIn } from 'lucide-react';
 
 const Nav: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [showLogin, setShowLogin] = useState(false); // État pour la modale de connexion
 
   const panagroGreen = "#8DC63F";
-  const forestDark = "#1A2F15"; 
+  const forestDark = "#1A2F15";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,6 +16,11 @@ const Nav: React.FC = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Désactiver le scroll quand le menu OU la modale est ouvert
+  useEffect(() => {
+    document.body.style.overflow = (isOpen || showLogin) ? 'hidden' : 'unset';
+  }, [isOpen, showLogin]);
 
   const links = [
     { name: "L'Exploitation", href: 'exploitation' },
@@ -29,116 +33,166 @@ const Nav: React.FC = () => {
   return (
     <>
       <nav 
-        className={`fixed top-0 w-full z-[100] transition-all duration-500 ${
+        className={`fixed top-0 left-0 w-full z-[200] transition-all duration-500 ${
           isScrolled || isOpen 
-            ? 'py-4 bg-white/95 backdrop-blur-md shadow-sm border-b border-gray-100' 
-            : 'py-8 bg-transparent'
+            ? 'py-3 bg-white shadow-md border-b border-gray-100' 
+            : 'py-5 bg-transparent'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex justify-between items-center">
           
-          {/* BRANDING */}
-          <div className="flex items-center gap-3 z-[110]">
+          {/* --- LOGO --- */}
+          <div className="flex items-center z-[210]">
             <a href="/" className="flex items-center gap-2 group">
-              <div className="w-10 h-10  flex items-center justify-center transition-transform group-hover:rotate-12 ">
-                
-                <img src={Logico} alt="Logico" />
+              <div 
+                className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center rounded-xl shadow-lg transition-transform group-hover:rotate-12"
+                style={{ backgroundColor: forestDark }}
+              >
+                <Leaf color="white" size={20} strokeWidth={2.5} />
               </div>
-              <span className={`text-2xl font-black tracking-tighter transition-colors ${isScrolled || isOpen ? 'text-[#1A2F15]' : 'text-[#1A2F15]'}`}>
-                PAN<span style={{ color: panagroGreen }}>AGRO</span>
-              </span>
+              <div className="flex flex-col leading-none">
+                <span className={`text-xl sm:text-2xl font-black tracking-tighter transition-colors ${
+                  isOpen ? 'text-white' : 'text-[#1A2F15]'
+                }`}>
+                  PAN<span style={{ color: panagroGreen }}>AGRO</span>
+                </span>
+                <span className="hidden xs:block text-[8px] sm:text-[9px] font-bold uppercase tracking-[0.2em] text-gray-400">
+                  Agro-Tech
+                </span>
+              </div>
             </a>
           </div>
 
-          {/* DESKTOP MENU */}
-          <div className="hidden lg:flex items-center gap-6 bg-[#1A2F15]/5 px-8 py-2.5 rounded-full border border-black/5 backdrop-blur-sm">
+          {/* --- DESKTOP MENU --- */}
+          <div className="hidden lg:flex items-center gap-6 bg-black/5 px-6 py-2 rounded-full backdrop-blur-sm border border-black/5">
             {links.map((link) => (
               <a 
                 key={link.name}
                 href={`/${link.href}`}
-                className={`text-[10px] font-black uppercase tracking-widest transition-all hover:scale-105 ${
-                  link.name === 'Invest' 
-                    ? 'text-[#8DC63F] flex items-center gap-1.5' 
-                    : 'text-[#1A2F15] hover:opacity-50'
-                }`}
+                className="text-[10px] font-black uppercase tracking-widest text-[#1A2F15] hover:opacity-50 transition-all"
               >
-                {link.name === 'Invest' && <TrendingUp size={12} strokeWidth={3} />}
                 {link.name}
               </a>
             ))}
           </div>
 
-          {/* CTA & MOBILE TOGGLE */}
-          <div className="flex items-center gap-4 z-[110]">
-            <a 
-              href="/login" 
-              className="hidden sm:flex items-center gap-2 px-6 py-3 rounded-xl text-white text-[10px] font-black uppercase tracking-widest transition-all hover:brightness-110 active:scale-95 shadow-lg shadow-[#1A2F15]/20"
-              style={{ backgroundColor: forestDark }}
+          {/* --- ACTIONS & BURGER --- */}
+          <div className="flex items-center gap-3 z-[210]">
+            {/* Bouton Connexion (Desktop) */}
+            <button 
+              onClick={() => setShowLogin(true)}
+              className="hidden sm:flex items-center gap-2 px-5 py-2.5 rounded-lg text-white text-[10px] font-black uppercase tracking-widest transition-all hover:brightness-110 active:scale-95 shadow-sm"
+              style={{ backgroundColor: isOpen ? panagroGreen : forestDark }}
             >
-              Espace Interne
-            </a>
+              <LogIn size={14} /> Connexion
+            </button>
             
+            {/* BURGER CSS */}
             <button 
               onClick={() => setIsOpen(!isOpen)}
-              className={`lg:hidden w-12 h-12 flex items-center justify-center rounded-xl transition-colors ${
-                isOpen ? 'bg-[#8DC63F] text-white' : 'bg-gray-100 text-[#1A2F15]'
-              }`}
+              className="flex lg:hidden w-10 h-10 flex-col items-center justify-center rounded-lg z-[220] transition-all relative"
+              style={{ backgroundColor: isOpen ? 'white' : forestDark }}
+              aria-label="Menu"
             >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
+              {isOpen ? (
+                <X size={24} color={forestDark} strokeWidth={2.5} />
+              ) : (
+                <div className="flex flex-col gap-1.5">
+                  <span className="w-6 h-0.5 bg-white rounded-full"></span>
+                  <span className="w-6 h-0.5 bg-white rounded-full"></span>
+                  <span className="w-6 h-0.5 bg-white rounded-full"></span>
+                </div>
+              )}
             </button>
           </div>
         </div>
 
-        {/* --- MOBILE OVERLAY --- */}
-        <div className={`
-          fixed inset-0 bg-[#1A2F15] z-[105] flex flex-col transition-all duration-700 ease-in-out lg:hidden
-          ${isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}
-        `}>
-          <div className="flex flex-col h-full justify-center px-10 gap-6">
-            <span className="text-[#8DC63F] text-[10px] font-black uppercase tracking-[0.5em] mb-4 opacity-50">Navigation</span>
+        {/* --- OVERLAY MENU MOBILE --- */}
+        <div 
+          className={`fixed inset-0 bg-[#1A2F15] z-[205] transition-transform duration-500 ease-in-out lg:hidden flex flex-col ${
+            isOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+        >
+          <div className="flex-1 flex flex-col justify-center px-10 gap-6">
+            <p className="text-[#8DC63F] text-[10px] font-black uppercase tracking-[0.5em] opacity-40">Navigation</p>
             {links.map((link, i) => (
               <a 
                 key={link.name}
                 href={`/${link.href}`}
                 onClick={() => setIsOpen(false)}
-                className={`text-5xl font-black text-white tracking-tighter hover:text-[#8DC63F] transition-all transform flex items-center gap-4 ${
-                  isOpen ? 'translate-x-0 opacity-100' : '-translate-x-10 opacity-0'
+                className={`text-4xl font-black text-white tracking-tighter hover:text-[#8DC63F] transition-all flex items-center gap-4 ${
+                  isOpen ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'
                 }`}
-                style={{ transitionDelay: `${i * 100}ms` }}
+                style={{ transitionDelay: isOpen ? `${i * 75}ms` : '0ms' }}
               >
                 {link.name}
-                {link.name === 'Invest' && <TrendingUp size={32} className="text-[#8DC63F]" />}
+                {link.name === 'Invest' && <TrendingUp size={24} className="text-[#8DC63F]" />}
               </a>
             ))}
             
-            <div className="h-px w-full bg-white/10 my-8"></div>
-            
-            <a 
-              href="#booking"
-              onClick={() => setIsOpen(false)}
-              className="text-2xl font-black text-[#8DC63F] flex items-center gap-3 group"
+            {/* Bouton Connexion dans le menu mobile */}
+            <button 
+              onClick={() => { setIsOpen(false); setShowLogin(true); }}
+              className="text-4xl font-black text-[#8DC63F] flex items-center gap-3 transition-all hover:translate-x-2"
             >
-              Réserver maintenant <span className="group-hover:translate-x-2 transition-transform">→</span>
-            </a>
-          </div>
+              Connexion <LogIn size={32} />
+            </button>
 
-          {/* Footer Mobile Menu */}
-          <div className="p-10 border-t border-white/5 flex justify-between items-center bg-black/20">
-             <div>
-                <p className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">© 2026 PANAGRO FARM</p>
-                <p className="text-[9px] text-[#8DC63F] font-black uppercase tracking-widest">Financement Durable</p>
-             </div>
-             <div className="flex gap-4">
-                <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-[#8DC63F] border border-white/10">
-                    <TrendingUp size={18} />
-                </div>
-             </div>
+            <div className="h-px w-full bg-white/10 my-4"></div>
+            <a href="/contact" onClick={() => setIsOpen(false)} className="text-xl font-black text-[#8DC63F] flex items-center gap-3 group">
+              Nous contacter <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
+            </a>
           </div>
         </div>
       </nav>
 
-      {/* Spacer pour éviter le chevauchement au chargement */}
-      <div className={`${isScrolled ? 'h-20' : 'h-24'} transition-all`}></div>
+      {/* --- MODALE DE CONNEXION --- */}
+      {showLogin && (
+        <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
+          {/* Overlay sombre */}
+          <div 
+            className="absolute inset-0 bg-[#1A2F15]/90 backdrop-blur-sm transition-opacity"
+            onClick={() => setShowLogin(false)}
+          ></div>
+          
+          {/* Boîte de dialogue */}
+          <div className="relative bg-white w-full max-w-md rounded-2xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-300">
+            <div className="p-8">
+              <div className="flex justify-between items-center mb-8">
+                <h2 className="text-3xl font-black text-[#1A2F15] tracking-tighter">Accès <span style={{ color: panagroGreen }}>PANAGRO</span></h2>
+                <button onClick={() => setShowLogin(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                  <X size={24} />
+                </button>
+              </div>
+
+              <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Identifiant</label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                    <input type="text" className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-[#8DC63F] outline-none transition-all" placeholder="votre@email.com" />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Mot de passe</label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                    <input type="password" className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-[#8DC63F] outline-none transition-all" placeholder="••••••••" />
+                  </div>
+                </div>
+
+                <button className="w-full py-4 bg-[#1A2F15] text-white font-black uppercase tracking-[0.2em] rounded-xl hover:brightness-110 transition-all mt-4 active:scale-95 shadow-lg">
+                  Se Connecter
+                </button>
+              </form>
+              <p className="text-center text-[10px] text-gray-400 mt-6 font-bold uppercase tracking-widest">Système de Gestion Interne</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <div className={`${isScrolled ? 'h-16' : 'h-20 sm:h-24'} transition-all duration-500`}></div>
     </>
   );
 };

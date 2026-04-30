@@ -53,7 +53,7 @@ const App: React.FC = () => {
               <button className="px-8 py-4 bg-[#1A2F15] text-white font-bold rounded-xl hover:shadow-xl transition-all">
                 Réserver un Séjour
               </button>
-              <button className="px-8 py-4 border-2 border-gray-200 text-[#1A2F15] font-bold rounded-xl hover:border-[#1A2F15] transition-all">
+              <button className="px-8 py-4 border-2 border-gray-200 text-[#8DC63F] font-bold rounded-xl hover:border-[#1A2F15] transition-all">
                 Postuler (Stage/Job)
               </button>
             </div>
