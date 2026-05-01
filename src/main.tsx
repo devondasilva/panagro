@@ -8,6 +8,7 @@ import Hebergement from './pages/Hebergement.tsx';
 import Contact from './pages/Contact.tsx';
 import ReactDOM from "react-dom/client";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Franchise from './pages/Franchise.tsx';
 
 
 const root = document.getElementById("root");
@@ -23,6 +24,7 @@ if (root) {
         <Route path="/login" element={<Login />} />
         <Route path="/hebergement" element={<Hebergement />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/franchise" element={<Franchise />} />
       </Routes>
     </Router>
   );

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, TrendingUp, ArrowRight, Leaf, User, Lock, LogIn } from 'lucide-react';
+import { X, TrendingUp, ArrowRight, Leaf, User, Lock, LogIn, Globe } from 'lucide-react';
 
 const Nav: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -28,6 +28,7 @@ const Nav: React.FC = () => {
     { name: 'Stages & Emplois', href: 'careers' },
     { name: 'Invest', href: 'invest' },
     { name: 'Contact', href: 'contact' },
+    { name: 'Franchise', href: 'franchise' }
   ];
 
   return (
@@ -127,6 +128,7 @@ const Nav: React.FC = () => {
               >
                 {link.name}
                 {link.name === 'Invest' && <TrendingUp size={24} className="text-[#8DC63F]" />}
+                {link.name === 'Franchise' && <Globe size={24} className="text-[#8DC63F]" />}
               </a>
             ))}
             
